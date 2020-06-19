@@ -1,0 +1,61 @@
+# Maintainer: Forget Luc <luc.forget.dustbin@gmail.com>
+pkgname=rpag-svn
+pkgver=v0.1.r123.688cfe5
+pkgrel=1
+pkgdesc="Provides the softposit sources"
+arch=('x86_64')
+url="https://gitlab.com/cerlane/SoftPosit.git"
+license=('BSD3')
+groups=()
+depends=()
+makedepends=('git') # 'bzr', 'git', 'mercurial' or 'subversion'
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=('softposit::git+https://gitlab.com/cerlane/SoftPosit.git' 'Makefile.patch')
+noextract=()
+md5sums=('SKIP' 'SKIP')
+
+
+# Please refer to the 'USING VCS SOURCES' section of the PKGBUILD man page for
+# a description of each element in the source array.
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+
+# The examples below are not absolute and need to be adapted to each repo. The
+# primary goal is to generate version numbers that will increase according to
+# pacman's version comparisons with later commits to the repo. The format
+# VERSION='VER_NUM.rREV_NUM.HASH', or a relevant subset in case VER_NUM or HASH
+# are not available, is recommended.
+
+# Git, tags available
+	printf "%s" "$(git describe --long | sed 's/\([^-]*-\)g/r\1/;s/-/./g')"
+}
+
+prepare() {
+	echo "prepare()"
+	cd "$srcdir/${pkgname%-git}/"
+	patch -p1 -i "$srcdir/Makefile.patch"
+}
+
+build() {
+	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
+	make
+}
+
+check() {
+	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
+	find . -name softposit.a
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
+	mkdir -p "$pkgdir/usr/lib" "$pkgdir/usr/include"
+	cp softposit.so "$pkgdir/usr/lib/libsoftposit.so"
+	cp "$srcdir/${pkgname%-git}/source/include/softposit.h" "$pkgdir/usr/include"
+	cp "$srcdir/${pkgname%-git}/source/include/softposit_types.h" "$pkgdir/usr/include"
+}

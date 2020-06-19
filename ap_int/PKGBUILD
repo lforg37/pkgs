@@ -1,0 +1,35 @@
+# Maintainer: Luc Forget <luc.forget@protonmail.com>
+pkgname='xilinx-hls-arbitrary-precision-types-git'
+pkgver=200a9aecaadf471592558540dc5a88256cbf880f
+pkgrel=1
+pkgdesc="Xilinx C++ header library for simulation of arbitrary precision types in HLS"
+arch=('any')
+url="https://github.com/Xilinx/HLS_arbitrary_Precision_Types"
+license=('APACHE')
+groups=()
+depends=()
+makedepends=('git')
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("${pkgname%-git}::git+https://github.com/Xilinx/HLS_arbitrary_Precision_Types.git")
+noextract=()
+md5sums=('SKIP')
+validpgpkeys=()
+
+pkgver() {
+	cd "${pkgname%-git}"
+	git log -1 --format="%H"
+}
+
+package() {
+	cd "${pkgname%-git}"
+	mkdir -p $pkgdir/usr
+	mv include $pkgdir/usr
+}
