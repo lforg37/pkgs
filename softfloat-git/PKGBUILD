@@ -1,0 +1,45 @@
+# Maintainer: Luc Forget <luc.forget@protonmail.com>
+pkgname='softfloat-git'
+pkgver=b64af41c3276f97f0e181920400ee056b9c88037
+pkgrel=1
+pkgdesc="IEEE-754 software emulation library"
+arch=('x86_64')
+url="https://github.com/ucb-bar/berkeley-softfloat-3"
+license=('custom')
+groups=()
+depends=()
+makedepends=('git')
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("${pkgname%-git}::git+https://github.com/ucb-bar/berkeley-softfloat-3.git")
+noextract=()
+md5sums=('SKIP')
+validpgpkeys=()
+
+pkgver() {
+	cd "${pkgname%-git}"
+	git log -1 --format="%H"
+}
+
+build() {
+	cd "${pkgname%-git}"/build/Linux-x86_64-GCC
+	make
+} 
+
+package() {
+	cd "${pkgname%-git}"
+	mkdir -p $pkgdir/usr/share/licenses/$pkgname
+	cp COPYING.txt $pkgdir/usr/share/licenses/$pkgname/license.txt
+	mkdir -p $pkgdir/usr/include/softfloat
+	mv source/include/* $pkgdir/usr/include/softfloat
+	mv build/Linux-x86_64-GCC/platform.h $pkgdir/usr/include/softfloat/
+	mkdir $pkgdir/usr/lib
+	mv build/Linux-x86_64-GCC/softfloat.a $pkgdir/usr/lib/libsoftfloat-3.a
+}
