@@ -1,0 +1,11 @@
+--- softposit/build/Linux-x86_64-GCC/Makefile	2019-09-13 09:52:01.507498770 +0200
++++ Makefile_new	2019-09-13 09:57:43.531878447 +0200
+@@ -71,7 +71,7 @@
+ COMPILE_C = \
+   $(COMPILER) -c -Werror-implicit-function-declaration -DSOFTPOSIT_FAST_INT64 \
+     $(SOFTPOSIT_OPTS) $(C_INCLUDES) $(OPTIMISATION) \
+-    -o $@ 
++    -fPIC -o $@ 
+ MAKELIB = ar crs $@
+ MAKESLIB = $(COMPILER) -shared $^
+ 

@@ -1,5 +1,5 @@
 # Maintainer: Luc Forget <luc.forget@protonmail.com>
-pkgname='softfloat-git'
+pkgname='softfloat-3-git'
 pkgver=b64af41c3276f97f0e181920400ee056b9c88037
 pkgrel=1
 pkgdesc="IEEE-754 software emulation library"
