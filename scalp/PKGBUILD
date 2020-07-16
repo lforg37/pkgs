@@ -1,0 +1,45 @@
+# Maintainer: Forget Luc <luc.forget@protonmail.com>
+pkgname=scalp-git
+pkgver=84
+pkgrel=1
+pkgdesc="The suite contains optimization tools for the pipelined multiple constant multiplication (PMCM) problem"
+arch=('any')
+url="https://digidev.digi.e-technik.uni-kassel.de/scalp/"
+license=('LGPL3')
+groups=()
+depends=()
+makedepends=('git' 'cmake') 
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=("${pkgname%-git}::git+https://digidev.digi.e-technik.uni-kassel.de/git/scalp.git")
+noextract=()
+md5sums=('SKIP') 
+
+
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+	git rev-list master --count
+}
+
+prepare() {
+	echo "prepare()"
+	cd "$srcdir/${pkgname%-git}"
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_INSTALL_PREFIX=$pkgdir/usr
+}
+
+build() {
+	cd "$srcdir/${pkgname%-git}/build/"
+	make
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}/build/"
+	make install 
+}

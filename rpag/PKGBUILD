@@ -1,30 +1,28 @@
-# Maintainer: Forget Luc <luc.forget.dustbin@gmail.com>
-pkgname=rpag-svn
-pkgver=v0.1.r123.688cfe5
+# Maintainer: Forget Luc <luc.forget@protonmail.com>
+pkgname=pagsuite-svn
+pkgver=120
 pkgrel=1
-pkgdesc="Provides the softposit sources"
-arch=('x86_64')
-url="https://gitlab.com/cerlane/SoftPosit.git"
-license=('BSD3')
+pkgdesc="The suite contains optimization tools for the pipelined multiple constant multiplication (PMCM) problem"
+arch=('any')
+url="https://digidev.digi.e-technik.uni-kassel.de/pagsuite/"
+license=('custom')
 groups=()
-depends=()
-makedepends=('git') # 'bzr', 'git', 'mercurial' or 'subversion'
-provides=("${pkgname%-git}")
-conflicts=("${pkgname%-git}")
+depends=('scalp')
+makedepends=('subversion' 'cmake') 
+provides=("${pkgname%-svn}")
+conflicts=("${pkgname%-svn}")
 replaces=()
 backup=()
 options=()
 install=
-source=('softposit::git+https://gitlab.com/cerlane/SoftPosit.git' 'Makefile.patch')
+source=('pagsuite::svn+https://digidev.digi.e-technik.uni-kassel.de/home/svn/pagsuite' 'LICENSE')
 noextract=()
-md5sums=('SKIP' 'SKIP')
+md5sums=('SKIP' '6014b577b70b6ee8f0704cc6f460e26e')
 
 
-# Please refer to the 'USING VCS SOURCES' section of the PKGBUILD man page for
-# a description of each element in the source array.
 
 pkgver() {
-	cd "$srcdir/${pkgname%-git}"
+	cd "$srcdir/${pkgname%-svn}"
 
 # The examples below are not absolute and need to be adapted to each repo. The
 # primary goal is to generate version numbers that will increase according to
@@ -32,30 +30,24 @@ pkgver() {
 # VERSION='VER_NUM.rREV_NUM.HASH', or a relevant subset in case VER_NUM or HASH
 # are not available, is recommended.
 
-# Git, tags available
-	printf "%s" "$(git describe --long | sed 's/\([^-]*-\)g/r\1/;s/-/./g')"
+	printf "%s" "$(svn info --show-item revision)"
 }
 
 prepare() {
 	echo "prepare()"
-	cd "$srcdir/${pkgname%-git}/"
-	patch -p1 -i "$srcdir/Makefile.patch"
+	cd "$srcdir/${pkgname%-svn}/trunk/"
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_INSTALL_PREFIX=$pkgdir/usr
 }
 
 build() {
-	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
+	cd "$srcdir/${pkgname%-svn}/trunk/build/"
 	make
 }
 
-check() {
-	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
-	find . -name softposit.a
-}
-
 package() {
-	cd "$srcdir/${pkgname%-git}/build/Linux-x86_64-GCC"
-	mkdir -p "$pkgdir/usr/lib" "$pkgdir/usr/include"
-	cp softposit.so "$pkgdir/usr/lib/libsoftposit.so"
-	cp "$srcdir/${pkgname%-git}/source/include/softposit.h" "$pkgdir/usr/include"
-	cp "$srcdir/${pkgname%-git}/source/include/softposit_types.h" "$pkgdir/usr/include"
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+	cd "$srcdir/${pkgname%-svn}/trunk/build/"
+	make install
 }

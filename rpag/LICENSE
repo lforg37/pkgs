@@ -1,0 +1,8 @@
+
+The current release can be downloaded as source distribution. It is developed at the University of Kassel and maintained by Martin Kumm (kumm(at)uni-kassel.de) and Konrad Möller (konrad.moeller(at)uni-kassel.de). You can use and/or modify it for research purposes, for commercial use, please ask for a license.
+
+It does not depend on any library and can be compiled on any platform (MacOS, Linux and Windows are tested for RPAG, MacOS and Linux are tested for OPAG) using gcc or clang (gcc 4.2 64bit, clang Apple LLVM version 5.1 are tested). It was developed using Qt. So the easiest way to compile the project is to open the project file (rpag.pro or opag.pro in the corresponding qt folder) with QtCreator?. Alternatively, qmake can be used to create a Makefile for a given platform. It is recommended to compile in realease mode where optimization flags are set correctly.
+
+(c) Copyright University of Kassel, Digital Technology Group, Martin Kumm (kumm(at)uni-kassel.de), Konrad Möller (konrad.moeller(at)uni-kassel.de)
+
+All rights reserved 
